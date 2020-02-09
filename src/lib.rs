@@ -17,6 +17,9 @@ extern crate log;
 #[cfg(feature = "serde")]
 extern crate serde;
 
+#[cfg(feature = "no-std")]
+extern crate libm;
+
 use core::convert::TryFrom;
 use core::marker::PhantomData;
 use core::fmt::Debug;

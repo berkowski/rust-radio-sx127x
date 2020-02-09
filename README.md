@@ -29,7 +29,7 @@ Install the utility with one of the following methods:
 ## As a `no_std` Library
 
 The radio-sx127x crate can be used as an interface library for the sx127x radio on other
-embedded devices.  To enable `no_std` usage, add `default-features = false` to your
+embedded devices.  To enable `no_std` usage, add `features = [ "no-std" ]` to your
 `Cargo.toml`
 
 

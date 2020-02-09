@@ -13,6 +13,9 @@ use crate::device::fsk::*;
 use crate::device::fsk::{Irq1, Irq2};
 use crate::device::{self, regs, Channel, Modem, ModemMode, PacketInfo, State};
 
+#[cfg(feature = "no-std")]
+use libm::roundf;
+
 /// Marker struct for FSK/OOK operating mode
 pub struct FskOokMode();
 
@@ -145,7 +148,14 @@ where
         self.set_frequency(channel.freq)?;
 
         // Calculate channel configuration
+        #[cfg(feature = "no-std")]
+        let fdev = roundf((channel.fdev as f32) / device::FREQ_STEP) as u32;
+        #[cfg(not(feature = "no-std"))]
         let fdev = ((channel.fdev as f32) / device::FREQ_STEP).round() as u32;
+
+        #[cfg(feature = "no-std")]
+        let datarate = roundf(self.config.xtal_freq as f32 / channel.br as f32) as u32;
+        #[cfg(not(feature = "no-std"))]
         let datarate = (self.config.xtal_freq as f32 / channel.br as f32).round() as u32;
         trace!("fdev: {} bitrate: {}", fdev, datarate);
 
